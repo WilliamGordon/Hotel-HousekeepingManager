@@ -2,6 +2,42 @@
 
 class Booking extends Model {
 
+    public function getNameCheckIn($idRoom, $checkIn)
+    {
+        $sql = "SELECT DISTINCT booking.id_booking, booking.id_guest FROM booking INNER JOIN room ON booking.id_room = $idRoom WHERE booking.check_in = '$checkIn'";
+
+        $pdo = $this->dbConnect();
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+
+    }
+
+    public function getNameCheckOut($idRoom, $checkOut)
+    {
+        $sql = "SELECT DISTINCT booking.id_booking, booking.id_guest FROM booking INNER JOIN room ON booking.id_room = $idRoom WHERE booking.check_out = '$checkOut'";
+
+        $pdo = $this->dbConnect();
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+
+    }
+
+    public function getNameCheckStays($idRoom, $date)
+    {
+        $sql = "SELECT DISTINCT booking.id_booking, booking.id_guest FROM booking INNER JOIN room ON booking.id_room = $idRoom WHERE booking.check_in < '$date' AND booking.check_out > '$date'";
+
+        $pdo = $this->dbConnect();
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+
     public function getBookings($date){
 
         //DO NOT PASS THE DATE!!!!
@@ -127,6 +163,18 @@ class Booking extends Model {
 
         return $stmt->fetch();
     }
+
+    public function CountDeparturesByType($date, $type){
+
+        $sql = "SELECT COUNT(*) AS nb_departures from booking INNER JOIN room ON room.id_room = booking.id_room INNER JOIN type_room ON type_room.id_type_room = room.id_type_room WHERE booking.check_out = '$date' AND type_room.id_type_room = $type";
+
+        $pdo = $this->dbConnect();
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+
+        return $stmt->fetch()[0];
+    }
+
 
 }
 

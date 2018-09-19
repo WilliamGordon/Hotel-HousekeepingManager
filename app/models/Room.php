@@ -24,12 +24,14 @@ class Room extends Model {
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
 
-        return $stmt->fetchall();
+        $results = $stmt->fetchall();
+
+        return $results;
     }
 
     public function getRoomCountByType() {
 
-        $sql = "SELECT type_room.id_type_room, type_room.type_name, COUNT(room.id_type_room) AS Room_count 
+        $sql = "SELECT type_room.*, COUNT(room.id_type_room) AS Room_count 
                 FROM room 
                 INNER JOIN type_room ON type_room.id_type_room = room.id_type_room 
                 GROUP BY room.id_type_room";
@@ -68,7 +70,7 @@ class Room extends Model {
         $stmt = $pdo->prepare($sql);
         $stmt->execute($data);
 
-        return $stmt->fetchall();
+        return $stmt->fetch();
     }
 
     public function getRangeCapacity($idTypeRoom){
@@ -83,9 +85,10 @@ class Room extends Model {
         $stmt = $pdo->prepare($sql);
         $stmt->execute($data);
 
-        return $stmt->fetchall();
+        return $stmt->fetch();
 
     }
+
 
 }
 

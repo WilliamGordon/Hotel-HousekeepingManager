@@ -34,7 +34,7 @@
                     <a class="nav-link" href="<?php echo ROOT; ?>/home">Home<span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="<?php echo ROOT; ?>/room">Rooms<span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="<?php echo ROOT; ?>/room/category/1">Rooms<span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
@@ -55,7 +55,7 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="<?php echo ROOT; ?>/housekeeping/day/<?php echo date('Y-m-d'); ?>">Daily Task</a>
                         <a class="dropdown-item" href="<?php echo ROOT; ?>/housekeeping/week/<?php echo date('Y-m-d'); ?>">Weekly Info</a>
-                        <a class="dropdown-item" href="<?php echo ROOT; ?>/housekeeping/linen">Linen</a>
+                        <a class="dropdown-item" href="<?php echo ROOT; ?>/housekeeping/linen/<?php echo date('Y-m-d'); ?>">Linen</a>
                     </div>
                 </li>
             </ul>

@@ -2,20 +2,21 @@
 
 class BookingController extends Controller
 {
-    public function index($date)
+
+    public function getArrayDates($startDate, $offSet)
     {
-        // $listOfBookings = $this->model('Booking');
 
-        // //HACK!!
-        // if(isset($_POST['date']))
-        // {
-        //     $date = $_POST['date'];
-        // }
+        $endDate =  date ("Y-m-d", strtotime('+'.$offSet.' day', strtotime($startDate)));
 
-        // $this->view('booking/index', [
-        //     'booking' => $listOfBookings->getBookings($date),
-        //     'date' => $date      
-        //     ]);
+        $dateRange = [];
+        $date = $startDate;
+        $end_date = $endDate;
+        while (strtotime($date) <= strtotime($end_date)) {
+            array_push($dateRange, $date);
+            $date = date ("Y-m-d", strtotime("+1 day", strtotime($date)));
+        }
+
+        return $dateRange;
     }
 
     
@@ -35,38 +36,64 @@ class BookingController extends Controller
                 ]);
     }
 
+    public function getAvailibility($idTypeRoom, $checkIn, $offset)
+    {
+
+        $room           = $this->model('Room');
+        $booking        = $this->model('Booking');
+
+        $dateRange      = $this->getArrayDates($checkIn, 9);
+        $rooms          = $room->getRoomsByType($idTypeRoom);
+
+        $availibility = [];
+
+        foreach ($rooms as $key => $value) 
+        {
+            $availibility[$value['id_room']] = [];
+        }
+
+
+        foreach ($availibility as $room => $datesAndGuests) 
+        {
+            foreach ($dateRange as $date) 
+            {
+                $datesAndGuests[$date.'M'] = $booking->getNameCheckOut($room, $date);
+                $datesAndGuests[$date.'E'] = $booking->getNameCheckIn($room, $date);
+
+                if(!$datesAndGuests[$date.'M'] && !$datesAndGuests[$date.'E'])
+                {
+                    $datesAndGuests[$date.'M'] = $booking->getNameCheckStays($room, $date);
+                    $datesAndGuests[$date.'E'] = $booking->getNameCheckStays($room, $date);
+                }
+            }
+            $availibility[$room] = $datesAndGuests;
+        }
+
+        return $availibility;
+    }
+
 
     public function week($idTypeRoom, $checkIn)
     {
-        $typesOfRooms = $this->model('Room');
-        $bookings = $this->model('Booking');
-        $Guest = $this->model('Guest');
+        $room           = $this->model('Room');
+        $booking        = $this->model('Booking');
+        $Guest          = $this->model('Guest');
 
         if(isset($_POST['checkIn']))
         {
             $checkIn = $_POST['checkIn'];
         } 
-
-
-        $checkOut = date ("Y-m-d", strtotime("+9 day", strtotime($checkIn)));
         
-        $datesOfOccupacy = [];
-            $date = $checkIn;
-            $end_date = $checkOut;
-            while (strtotime($date) <= strtotime($end_date)) {
-                array_push($datesOfOccupacy, $date);
-                $date = date ("Y-m-d", strtotime("+1 day", strtotime($date)));
-            }
+        $dateRange      = $this->getArrayDates($checkIn, 9);
+        $roomTypes      = $room->getRoomCountByType();
+        $availibility = $this->getAvailibility($idTypeRoom, $checkIn, 9);
 
         $this->view('booking/week', [
-            'roomCat' => $typesOfRooms->getRoomCountByType(),
+            'roomCat' => $roomTypes,
             'idTypeRoom' => $idTypeRoom,
-            'rooms' => $typesOfRooms->getRoomsByType($idTypeRoom),
-            'typeRooms' => $typesOfRooms->getTypesOfRoom(),
-            'bookings' => $bookings->getAvailability($idTypeRoom, $checkIn, $checkOut),
             'checkIn' => $checkIn,
-            'checkOut' => $checkOut,
-            'datesOfOccupacy' => $datesOfOccupacy
+            'dateRange' => $dateRange,
+            'availibility' => $availibility, 
             ]);
     }
 
@@ -98,6 +125,7 @@ class BookingController extends Controller
                 'checkOut' => $checkOut,
                 'datesOfOccupacy' => $datesOfOccupacy
             ]);
+
         } else if (isset($_POST['CheckInSelected'], $_POST['CheckOutSelected'], $_POST['idRoomSelected'])) {
 
             $this->view('booking/addGuestBooking', []);

@@ -10,7 +10,6 @@
                         <div class="col text-center">
                             <div class="row">
                                 <br><br><br>
-
                             </div>
                             <div class="row">
                                 <div class="col-4 text-center">
@@ -53,7 +52,7 @@
                                             <?php } ?>
                                             <tr>
                                                 <td>
-                                                    <input class="btn" type="button" value="Add a type of room">
+                                                    <a class="btn btn-secondary" href="<?php echo ROOT; ?>/room/addType">Add a type of room</a>
                                                     <br>
                                                 </td>
                                             </tr>
@@ -85,16 +84,16 @@
                                 <li class="list-group-item">Capacity:
 
                                     <span class="float-right">
-                                        <?= $data['range'][0]['min'] ?> -
-                                        <?= $data['range'][0]['max'] ?></span>
+                                        <?= $data['range']['min'] ?> -
+                                        <?= $data['range']['max'] ?></span>
                                 </li>
                                 <li class="list-group-item">Price:
                                     <span class="float-right">
-                                        <?= number_format($data['infoType'][0]['price'],2) ?> $</span>
+                                        <?= number_format($data['infoType']['price'],2) ?> $</span>
                                 </li>
                                 <li class="list-group-item">Kitchen:
                                     <span class="float-right">
-                                        <?php if($data['infoType'][0]['kitchen'])
+                                        <?php if($data['infoType']['kitchen'])
                         {
                             echo '<span class="badge badge-primary badge-pill">1</span>';
                         } else {
@@ -104,7 +103,7 @@
                                 </li>
                                 <li class="list-group-item">Tub:
                                     <span class="float-right">
-                                        <?php if($data['infoType'][0]['tub'])
+                                        <?php if($data['infoType']['tub'])
                         {
                             echo '<span class="badge badge-primary badge-pill">1</span>';
                         } else {
@@ -114,7 +113,7 @@
                                 </li>
                             </ul>
                             <br>
-                            <input class="btn" type="button" value="Edit Setting">
+                            <a class="btn btn-secondary" href="<?php echo ROOT; ?>/room/editType/<?= $data['infoType']['id_type_room'] ?>">Edit Setting</a>
                             <br>
                         </div>
                     </div>
@@ -157,7 +156,7 @@
                                     <?php } ?>
                                     <tr>
                                         <td>
-                                            <input class="btn" type="button" value="Add room">
+                                            <a class="btn btn-secondary" href="<?php echo ROOT; ?>/room/addRoom/<?= $data['infoType']['id_type_room'] ?>">Add room</a>
                                             <br>
                                         </td>
                                     </tr>

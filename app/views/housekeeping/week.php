@@ -15,7 +15,7 @@
                         <div class="col">
                             <br>
                             <form action="#" method="POST">
-                                <input type="date" name="date" class="form-control" value="<?php echo $data['date']; ?>">
+                                <input type="date" name="date" class="form-control" value="<?php echo $data['dateRange'][6]; ?>">
                         </div>
                         <div class="col">
                             <br>

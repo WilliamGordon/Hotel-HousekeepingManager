@@ -97,12 +97,19 @@
        
         <div class="row">
             <div class="col">
-            
                 <ul>
                     <li>Replace this</li>
                     <li>Repaire that</li>
                     <li>Clean This</li>
                     <li>Arrival room 2 need that for Anniversery</li>
+                </ul>
+            </div>
+            <div class="col-3">
+                <h6>Sheets Usage</h6>
+                <ul class="list-group">
+                    <li class="list-group-item">King: <span class="float-right"><?=$data['sheetsUsage']['nbKing']?></span></li>
+                    <li class="list-group-item">Queen: <span class="float-right"><?=$data['sheetsUsage']['nbQueen']?></span></li>
+                    <li class="list-group-item">Single: <span class="float-right"><?=$data['sheetsUsage']['nbSingle']?></span></li>
                 </ul>
             </div>    
         </div>

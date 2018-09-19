@@ -106,90 +106,38 @@
                             </form>
                             <br>
                             <table class="table table-bordered">
-                                <thead class="text-center">
-                                    <tr>
-                                        <th>#</th>
+                                <thead>
+                                    <tr class="text-center">
                                         <?php
-                        foreach ($data['datesOfOccupacy'] as $date) {
-                            echo '<th colspan="2">'. $date .'</th>';
-                        }
-                        ?>
+                 echo '<th scope="col">#</th>';
+                foreach ($data['dateRange'] as $date) 
+                {
+                    echo '<th scope="col" colspan="2">' . $date . '</th>';
+                }
+            ?>
                                     </tr>
                                 </thead>
-                                <?php
-                            $GuestCheckIn = date('Y-m-d', strtotime($data['datesOfOccupacy'][0]));
-                            $GuestCheckOut = date('Y-m-d', strtotime(end($data['datesOfOccupacy'])));
-
-                            foreach ($data['rooms'] as $room) {
-                                echo '<tr>';
-                                echo '<td>'.$room['num'].'</td>';
-                                $counterBooking = 0;
-                                $nbNights = sizeof($data['datesOfOccupacy']);
-                                foreach ($data['datesOfOccupacy']  as $date) {
-                                    $selected = false;
-                                    $isCheckIn = false;
-                                    $isCheckOut = false;
-                                    $turnOver = false;
-                                    $tempDateCO = "";
-                                    $tempDateCI = "";
-                                    foreach ($data['bookings'] as $booking) {
-                                        
-                                        $tryDate = date('Y-m-d', strtotime($date));
-                                        $tryCheckIn =  date('Y-m-d', strtotime($booking['check_in']));
-                                        $tryCheckOut =  date('Y-m-d', strtotime($booking['check_out']));
-                                        
-                                        if(($room['id_room'] == $booking['id_room']) && ($tryDate >= $tryCheckIn) && ($tryDate <= $tryCheckOut))
-                                        {
-                                            $selected = true;
-                                            $debug = $booking['id_guest'];
-
-                                            if($tryDate == $tryCheckIn)
-                                            {
-                                                $isCheckIn = true;
-                                                $tempDateCI = $tryCheckIn;
-
-                                                if($tempDateCI == $tempDateCO)
-                                                {
-                                                    $turnOver = true;
-                                                }
-                                            }
-
-                                            if($tryDate == $tryCheckOut)
-                                            {
-                                                $isCheckOut = true;
-                                                $tempDateCO = $tryCheckOut;
-                                            }
-                                        }
-                                    }
-                                    
-
-                                    if(!$selected || ($tempDateCO == $GuestCheckIn) || ($tempDateCI == $GuestCheckOut)){
-                                        $counterBooking++;
-                                    }
-                                    
-                                    if($selected && !$isCheckIn && !$isCheckOut) {
-                                        echo "<td bgcolor='#FCEDE9'></td><td bgcolor='#FCEDE9'></td>";
-                                    }
-                                    else if($selected && $isCheckIn) {
-
-                                        if($turnOver)
-                                        {
-                                            echo "<td bgcolor='#FCEDE9'></td><td bgcolor='#FCEDE9'></td>";
-                                        }else {
-                                            echo "<td bgcolor='#CDEAA1'></td><td bgcolor='#FCEDE9'></td>";
-                                        }
-
-                                    }
-                                    else if ($selected && $isCheckOut) {
-                                        echo "<td bgcolor='#FCEDE9'></td><td bgcolor='#CDEAA1'></td>";
-                                    }
-                                    else{
-                                        echo "<td bgcolor='#CDEAA1'></td><td bgcolor='#CDEAA1'></td>";
-                                    }
-                                }
-                            }
-                        ?>
                                 <tbody>
+                                    <?php
+                foreach ($data['availibility'] as $room => $dateGuest) 
+                {
+                    echo '<tr>';
+                    echo '<th scope="row">' . $room . '</th>';
+                    
+                    foreach ($dateGuest as $key => $value) 
+                    {
+                        if($value)
+                        {
+                            echo '<td bgcolor="#FCEDE9">'. $value['id_booking'] .'</td>';
+                        } 
+                        else
+                        {
+                            echo '<td bgcolor="#CDEAA1"></td>';    
+                        }
+                    }
+                    echo '</tr>';
+                }
+            ?>
                                 </tbody>
                             </table>
                         </div>
