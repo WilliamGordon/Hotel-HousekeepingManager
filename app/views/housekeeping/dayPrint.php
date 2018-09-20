@@ -1,5 +1,4 @@
 <html>
-
 <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
         crossorigin="anonymous">
@@ -17,7 +16,6 @@
         }
     </style>
 </head>
-
 <body>
     <div class="container-fluid  ">
         <div class="row">
@@ -32,7 +30,7 @@
                 <div class="row">
                     <div class="col">
                         <h6>Date:
-                            <?= $data['date']?>
+                            <?=$data['date'] ?>
                         </h6>
                     </div>
                 </div>
@@ -115,5 +113,4 @@
         </div>
     </div>
 </body>
-
 </html>

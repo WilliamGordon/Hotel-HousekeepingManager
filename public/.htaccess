@@ -1,6 +1,6 @@
 Options -MultiViews
 RewriteEngine on
-RewriteBase /mvc/public
+RewriteBase /HotelManager.v2/public
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php?url=$1 [NC]

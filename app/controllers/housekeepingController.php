@@ -7,6 +7,11 @@ class HousekeepingController extends Controller
         $this->view('housekeeping/index', []);
     }
 
+    public function testpdf()
+    {
+        $this->view('housekeeping/testpdf', []);
+    }
+
     public function getInfoDay($date)
     {
         $bookings = $this->model('Booking');
@@ -93,9 +98,6 @@ class HousekeepingController extends Controller
         }
 
         $usageSheets = $this->usageSheetDay($date);
-
-
-
 
         $this->view('housekeeping/dayPrint', [
             'date' => $date,
@@ -298,14 +300,6 @@ class HousekeepingController extends Controller
         return $AllInfoBedsRoom;
     }
 
-
-
-
-
-
-
-
-
     public function day($date)
     {
         $bookings = $this->model('Booking');
@@ -327,6 +321,7 @@ class HousekeepingController extends Controller
                 }
             }
         }
+
 
         $this->view('housekeeping/day', [
             'date' => $date,

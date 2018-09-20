@@ -1,6 +1,19 @@
 <?php $title = 'Daily Task'; ?>
 
 <?php ob_start(); ?>
+
+  <?php
+                $date = date('Y-m-d');
+
+                if(isset($_POST['date'])){
+                    $date =  $_POST['date'];
+                }
+
+                $url = ROOT . "/housekeeping/dayPrint/". $date; 
+                $url=str_replace(" ","",$url); 
+?>
+
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg"></div>
@@ -138,21 +151,10 @@
         <div class="col-lg">
             <a class="btn btn-primary" href="
 
-             <?php
-                $date = date('Y-m-d');
+           
 
-                if(isset($_POST['date'])){
-                    $date =  $_POST['date'];
-                }
+                <?php echo $url; ?>
 
-                $url = ROOT . "/housekeeping/dayPrint/". $date; 
-                
-                $url=str_replace(" ","",$url);
-
-                echo $url;
-                ?>
-
-            <?php echo ROOT; ?>/housekeeping/dayPrint/<?php echo date('Y-m-d'); ?>
             ">Print</a>
         </div>
     </div>
