@@ -15,7 +15,7 @@
                         <div class="col">
                             <br>
                             <form action="#" method="POST">
-                            <input type="date" name="date" class="form-control" value="<?php echo $data['date']; ?>">
+                                <input type="date" name="date" class="form-control" value="<?php echo $data['date']; ?>">
                         </div>
                         <div class="col">
                             <br>
@@ -26,58 +26,58 @@
                 </div>
             </div>
             <div class="row">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">Booking ID</th>
-                        <th scope="col">Firstname</th>
-                        <th scope="col">Lastname</th>
-                        <th scope="col">Room Type</th>
-                        <th scope="col">Check-in</th>
-                        <th scope="col">Check-out</th>
-                        <th scope="col">Nb Nights</th>
-                        <th scope="col">Nb Person</th>
-                        <th scope="col">Guest ID</th>
-                        <th scope="col">Room ID</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($data['booking'] as $room) { ?>
-                    <tr>
-                        <th scope="row">
-                            <?= $room['id_booking'] ?>
-                        </th>
-                        <td>
-                            <?= $room['firstname'] ?>
-                        </td>
-                        <td>
-                            <?= $room['lastname'] ?>
-                        </td>
-                        <td>
-                            <?= $room['type_name'] ?>
-                        </td>
-                        <td>
-                            <?= $room['check_in'] ?>
-                        </td>
-                        <td>
-                            <?= $room['check_out'] ?>
-                        </td>
-                        <td class="text-center">
-                            <?= $room['nb_night'] ?>
-                        </td>
-                        <td class="text-center">
-                            <?= $room['nb_person'] ?>
-                        </td>
-                        <td class="text-center">
-                            <?= $room['id_guest'] ?>
-                        </td>
-                        <td class="text-center"> 
-                            <?= $room['id_room'] ?>
-                        </td>
-                    </tr>
-                    <?php } ?>
-                </tbody>
-            </table>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Booking ID</th>
+                            <th scope="col">Firstname</th>
+                            <th scope="col">Lastname</th>
+                            <th scope="col">Room Type</th>
+                            <th scope="col">Check-in</th>
+                            <th scope="col">Check-out</th>
+                            <th scope="col">Nb Nights</th>
+                            <th scope="col">Nb Person</th>
+                            <th scope="col">Guest ID</th>
+                            <th scope="col">Room ID</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($data['booking'] as $room) { ?>
+                        <tr>
+                            <th scope="row">
+                                <?= $room['id_booking'] ?>
+                            </th>
+                            <td>
+                                <?= $room['firstname'] ?>
+                            </td>
+                            <td>
+                                <?= $room['lastname'] ?>
+                            </td>
+                            <td>
+                                <?= $room['type_name'] ?>
+                            </td>
+                            <td>
+                                <?= $room['check_in'] ?>
+                            </td>
+                            <td>
+                                <?= $room['check_out'] ?>
+                            </td>
+                            <td class="text-center">
+                                <?= $room['nb_night'] ?>
+                            </td>
+                            <td class="text-center">
+                                <?= $room['nb_person'] ?>
+                            </td>
+                            <td class="text-center">
+                                <?= $room['id_guest'] ?>
+                            </td>
+                            <td class="text-center">
+                                <?= $room['id_room'] ?>
+                            </td>
+                        </tr>
+                        <?php } ?>
+                    </tbody>
+                </table>
                 <a class="btn btn-secondary" href="<?php echo ROOT; ?>/booking/add">Add Booking</a>
             </div>
         </div>

@@ -16,23 +16,37 @@
                 <div class="col-5">
                     <ul class="list-group list-group-flush font-weight-bold">
                         <li class="list-group-item">Full Name:
-                            <span class="float-right"><?= $data['firstName']?> <?= $data['lastName']?></span>
+                            <span class="float-right">
+                                <?= $data['guest']['firstName']?>
+                                <?= $data['guest']['lastName']?>
+                            </span>
                         </li>
                         <li class="list-group-item">Email:
-                            <span class="float-right"><?= $data['email']?></span>
+                            <span class="float-right">
+                                <?= $data['guest']['email']?>
+                            </span>
                         </li>
                         <li class="list-group-item">Phone Number:
-                            <span class="float-right"> <?= $data['phone']?></span>
+                            <span class="float-right">
+                                <?= $data['guest']['phone']?>
+                            </span>
                         </li>
                         <li class="list-group-item">ID ROOM :
-                            <span class="float-right"><?= $data['idRoom']?></span>
+                            <span class="float-right">
+                                <?= $data['booking']['idRoom']?>
+                            </span>
                         </li>
                         <li class="list-group-item">ID GUEST :
-                            <span class="float-right"><?= $data['idGuest']?></span>
+                            <span class="float-right">
+                                <?= $data['idGuest']?>
+                            </span>
                         </li>
                         <li class="list-group-item">
-                            Will be Chekcing in the <?= $data['checkIn']?> and Checking Out the <?= $data['checkOut']?></p>
+                            Will be Chekcing in the
+                            <?= $data['booking']['checkIn']?> and Checking Out the
+                            <?= $data['booking']['checkOut']?>
                         </li>
+                    </ul>
                 </div>
             </div>
         </div>

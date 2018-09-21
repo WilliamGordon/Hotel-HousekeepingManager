@@ -3,13 +3,13 @@
 class Guest extends Model {
 
 
-    public function addGuestGiveId($firstName, $lastName, $email, $phone)
+    public function addGuestGiveId($guest)
     {
         $data = [
-            ':firstname' => $firstName,
-            ':lastname' => $lastName,
-            ':email' => $email,
-            ':phone' => $phone,
+            ':firstname'    => $guest['firstName'],
+            ':lastname'     => $guest['lastName'],
+            ':email'        => $guest['email'],
+            ':phone'        => $guest['phone'],
         ];
 
         $sql = "INSERT INTO guest (firstname, lastname, email, phone) VALUES (:firstname, :lastname, :email, :phone);";

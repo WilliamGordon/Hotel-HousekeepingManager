@@ -30,42 +30,31 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php foreach ($data['roomCat'] as $room) { ?>
-                                            <?php if($room['id_type_room'] == $data['idTypeRoom'])
+                                            <?php 
+                                            foreach ($data['roomCat'] as $room) 
                                             {
-                                                echo '<tr class="table-secondary">';
-                                            } else
-                                            {
-                                                echo '<tr>';
+                                                if($room['id_type_room'] == $data['idTypeRoom'])
+                                                {
+                                                    echo '<tr class="table-secondary">';
+                                                } else
+                                                {
+                                                    echo '<tr>';
+                                                }
+
+                                                echo '<th scope="row">' . ucwords($room['type_name']) . '</th>';
+                                                echo '<td class="text-center">' . $room['Room_count'] . '</td>';
+                                                echo '<td class="text-center">';
+
+                                                $date = date('Y-m-d');
+                                                if      (isset($_POST['checkIn']))  { $date =  $_POST['checkIn']; } 
+                                                else if (isset($data['checkIn']))   { $date = $data['checkIn']; }
+                                                $url = ROOT . "/booking/week/" . $room['id_type_room'] . "/" . $date; $url=str_replace(" ","",$url);
+                                                
+                                                echo '<a class="btn" href="' . $url . '">List</a>';
+                                                echo '</td>';
+                                                echo '</tr>';
                                             }
                                             ?>
-                                            <th scope="row">
-                                                <?= ucwords($room['type_name']) ?>
-                                            </th>
-                                            <td class="text-center">
-                                                <?= $room['Room_count'] ?>
-                                            </td>
-                                            <td class="text-center">
-                                                <a class="btn" href="
-                                                
-                                                <?php
-                                                $date = date('Y-m-d');
-
-                                                if(isset($_POST['checkIn'])){
-                                                    $date =  $_POST['checkIn'];
-                                                } else if (isset($data['checkIn']))
-                                                {
-                                                    $date = $data['checkIn'];
-                                                }
-                                                $url = ROOT . "/booking/week/"
-                                                    . $room['id_type_room'] . "/" . $date; $url=str_replace(" ","",$url);
-
-                                                echo $url;
-                                                ?>
-                                                ">List</a>
-                                            </td>
-                                            </tr>
-                                            <?php } ?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -109,35 +98,35 @@
                                 <thead>
                                     <tr class="text-center">
                                         <?php
-                 echo '<th scope="col">#</th>';
-                foreach ($data['dateRange'] as $date) 
-                {
-                    echo '<th scope="col" colspan="2">' . $date . '</th>';
-                }
-            ?>
+                                        echo '<th scope="col">#</th>';
+                                        foreach ($data['dateRange'] as $date) 
+                                        {
+                                            echo '<th scope="col" colspan="2">' . $date . '</th>';
+                                        }
+                                        ?>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
-                foreach ($data['availibility'] as $room => $dateGuest) 
-                {
-                    echo '<tr>';
-                    echo '<th scope="row">' . $room . '</th>';
+                                    foreach ($data['availibility'] as $room => $dateGuest) 
+                                    {
+                                    echo '<tr>';
+                                    echo '<th scope="row">' . $room . '</th>';
                     
-                    foreach ($dateGuest as $key => $value) 
-                    {
-                        if($value)
-                        {
-                            echo '<td bgcolor="#FCEDE9">'. $value['id_booking'] .'</td>';
-                        } 
-                        else
-                        {
-                            echo '<td bgcolor="#CDEAA1"></td>';    
-                        }
-                    }
-                    echo '</tr>';
-                }
-            ?>
+                                        foreach ($dateGuest as $key => $idBooking) 
+                                        {
+                                            if($idBooking)
+                                            {
+                                                echo '<td bgcolor="#FCEDE9">'. $idBooking.'</td>';
+                                            } 
+                                            else
+                                            {
+                                                echo '<td bgcolor="#CDEAA1"></td>';    
+                                            }
+                                        }
+                                    echo '</tr>';
+                                    }
+                                    ?>
                                 </tbody>
                             </table>
                         </div>

@@ -60,9 +60,12 @@ class Booking extends Model {
         return $stmt->fetchall();
     }
 
-    public function getAvailability($typeOfRoom, $checkIn, $checkOut){
+    public function getAvailability($typeOfRoom, $dateRange){
 
-        $sql = "SELECT booking.* FROM `booking` 
+        $checkIn = $dateRange[0];
+        $checkOut = end($dateRange);
+
+        $sql = "SELECT booking.id_booking, booking.check_in, booking.check_out, booking.id_room, booking.id_guest FROM `booking` 
                 INNER JOIN room ON booking.id_room = room.id_room 
                 INNER JOIN type_room ON room.id_type_room = type_room.id_type_room 
                 WHERE booking.check_out >= '$checkIn' AND booking.check_in <= '$checkOut' AND type_room.id_type_room = '$typeOfRoom'
@@ -72,18 +75,21 @@ class Booking extends Model {
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
 
-        return $stmt->fetchall();
+        return $stmt->fetchall(PDO::FETCH_ASSOC);
 
     }
 
-    public function addBooking($checkIn, $checkOut, $nbNight, $nbPerson, $idGuest, $idRoom) {
+    public function addBooking($booking, $idGuest) {
 
         $data = [
-            ':nb_night' => $nbNight,
-            ':nb_person' => $nbPerson,
-            ':id_guest' => $idGuest,
-            ':id_room' => $idRoom,
+            ':nb_night'     => $booking['nbNight'],
+            ':nb_person'    => $booking['nbPerson'],
+            ':id_guest'     => $idGuest,
+            ':id_room'      => $booking['idRoom'],
         ];
+
+        $checkIn = $booking['checkIn'];
+        $checkOut = $booking['checkOut'];
 
         $sql = "INSERT INTO booking (check_in, check_out, nb_night, nb_person, id_guest, id_room) 
                 VALUES ('$checkIn', '$checkOut', :nb_night, :nb_person, :id_guest, :id_room);";
