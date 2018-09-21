@@ -2,24 +2,124 @@
 
 class HousekeepingController extends Controller
 {
-    public function index()
+    //////////////
+    //CONTROLLER//
+    //////////////
+
+    public function day($date)
     {
-        $this->view('housekeeping/index', []);
+        $bookings   = $this->model('Booking');
+        $Rooms      = $this->model('Room');
+
+        if(isset($_POST['date'])) { $date = $_POST['date']; }
+
+        $departures     = $bookings->getAllDepartures($date);
+        $arrivals       = $bookings->getAllArrivals($date);
+        $turnOvers      = [];
+
+        foreach ($departures as $departure) 
+        {
+            foreach ($arrivals as $arrival) 
+            {
+                if($departure['check_out'] == $arrival['check_in'] && $departure['id_room'] == $arrival['id_room'])
+                {
+                    array_push($turnOvers, $departure['id_room']);
+                }
+            }
+        }
+        
+        $this->view('housekeeping/day', [
+            'date'          => $date,
+            'departures'    => $departures,
+            'arrivals'      => $arrivals,
+            'stayOvers'     => $bookings->getAllStayOvers($date),
+            'turnOvers'     => $turnOvers,
+            ]);
     }
 
-    public function testpdf()
+    public function dayPrint($date)
     {
-        $this->view('housekeeping/testpdf', []);
+        $bookings   = $this->model('Booking');
+        $Rooms      = $this->model('Room');
+
+        if(isset($_POST['date'])) { $date = $_POST['date']; }
+
+        $usageSheets = $this->usageSheetDay($date);
+        $departures     = $bookings->getAllDepartures($date);
+        $arrivals       = $bookings->getAllArrivals($date);
+        $turnOvers      = [];
+
+        foreach ($departures as $departure) 
+        {
+            foreach ($arrivals as $arrival) 
+            {
+                if($departure['check_out'] == $arrival['check_in'] && $departure['id_room'] == $arrival['id_room'])
+                {
+                    array_push($turnOvers, $departure['num']);
+                }
+            }
+        }
+
+        $this->view('housekeeping/dayPrint', [
+            'date'          => $date,
+            'departures'    => $departures,
+            'arrivals'      => $arrivals,
+            'stayOvers'     => $bookings->getAllStayOvers($date),
+            'turnOvers'     => $turnOvers,
+            'sheetsUsage'   => $usageSheets,
+            ]);
+    }   
+    
+    public function week($startDate)
+    {
+        $bookings   = $this->model('Booking');
+        $Rooms      = $this->model('Room');
+
+        if(isset($_POST['date'])){ $startDate = $_POST['date']; }
+
+        $this->view('housekeeping/week', [
+            'weekInfo'  => $this->getInfoWeek($startDate),
+            'dateRange' => $this->getArrayDates($startDate, 6),
+            ]);
     }
+
+    public function linen($startDate)
+    {
+        $rooms  = $this->model('Room');
+        $beds   = $this->model('Bed');
+
+        if(isset($_POST['date'])){ $startDate = $_POST['date']; }
+
+        $typesRoom  = $rooms->getRoomCountByType();
+        $typeBed    = $beds->getBedTypes();
+
+        $infoWeek           = $this->getInfoWeek($startDate);
+        $dateRange          = $this->getArrayDates($startDate, 6);
+        $dateDepType        = $this->IgetInfoWeekByType($startDate);
+        $AllInfoBedsRoom    = $this->nbBedByType();
+        $usageSheetWeek     = $this->usageSheetWeek($startDate);
+
+        $this->view('housekeeping/linen', [
+            'bedInfo'       => $AllInfoBedsRoom,
+            'typeRoom'      =>  $typesRoom,
+            'weekInfo'      => $this->getInfoWeek($startDate),
+            'dateRange'     => $this->getArrayDates($startDate, 6),
+            'typeDepWeek'   => $this->IgetInfoWeekByType($startDate),
+            'usageSheet'    => $usageSheetWeek,
+        ]);
+    }
+
+    ///////////
+    //METHODS//
+    ///////////
 
     public function getInfoDay($date)
     {
-        $bookings = $this->model('Booking');
-        $Rooms = $this->model('Room');
+        $bookings   = $this->model('Booking');
+        $Rooms      = $this->model('Room');
 
-        $listTypeRoom = $Rooms->getRoomCountByType();
-
-        $typeDepDay = [];
+        $listTypeRoom   = $Rooms->getRoomCountByType();
+        $typeDepDay     = [];
 
         foreach ($listTypeRoom as $key => $value) 
         {
@@ -32,7 +132,6 @@ class HousekeepingController extends Controller
 
     public function usageSheetDay($date)
     {
-
         $usageSheetDay = [
             'nbKing' => 0,
             'nbQueen' => 0,
@@ -73,42 +172,7 @@ class HousekeepingController extends Controller
             }
         return $usageSheetDay;
     }
-
-
-    public function dayPrint($date)
-    {
-        $bookings = $this->model('Booking');
-        $Rooms = $this->model('Room');
-
-        if(isset($_POST['date'])){
-            $date = $_POST['date'];
-        }
-
-        $departures = $bookings->getAllDepartures($date);
-        $arrivals = $bookings->getAllArrivals($date);
-        $turnOvers = [];
-
-        foreach ($departures as $departure) {
-            foreach ($arrivals as $arrival) {
-                if($departure['check_out'] == $arrival['check_in'] && $departure['id_room'] == $arrival['id_room'])
-                {
-                    array_push($turnOvers, $departure['num']);
-                }
-            }
-        }
-
-        $usageSheets = $this->usageSheetDay($date);
-
-        $this->view('housekeeping/dayPrint', [
-            'date' => $date,
-            'departures' => $departures,
-            'arrivals' => $arrivals,
-            'stayOvers' => $bookings->getAllStayOvers($date),
-            'turnOvers' => $turnOvers,
-            'sheetsUsage' => $usageSheets,
-            ]);
-    }   
-
+  
     public function getArrayDates($startDate, $offSet)
     {
 
@@ -163,6 +227,7 @@ class HousekeepingController extends Controller
         return $allInfo; 
     }
 
+    
     public function getInfoWeekByType($startDate)
     {
         $bookings = $this->model('Booking');
@@ -298,81 +363,6 @@ class HousekeepingController extends Controller
         ];
 
         return $AllInfoBedsRoom;
-    }
-
-    public function day($date)
-    {
-        $bookings = $this->model('Booking');
-        $Rooms = $this->model('Room');
-
-        if(isset($_POST['date'])){
-            $date = $_POST['date'];
-        }
-
-        $departures = $bookings->getAllDepartures($date);
-        $arrivals = $bookings->getAllArrivals($date);
-        $turnOvers = [];
-
-        foreach ($departures as $departure) {
-            foreach ($arrivals as $arrival) {
-                if($departure['check_out'] == $arrival['check_in'] && $departure['id_room'] == $arrival['id_room'])
-                {
-                    array_push($turnOvers, $departure['id_room']);
-                }
-            }
-        }
-
-
-        $this->view('housekeeping/day', [
-            'date' => $date,
-            'departures' => $departures,
-            'arrivals' => $arrivals,
-            'stayOvers' => $bookings->getAllStayOvers($date),
-            'turnOvers' => $turnOvers,
-            ]);
-    }
-
-    public function week($startDate)
-    {
-        $bookings = $this->model('Booking');
-        $Rooms = $this->model('Room');
-
-        if(isset($_POST['date'])){
-            $startDate = $_POST['date'];
-        }
-
-        $this->view('housekeeping/week', [
-            'weekInfo' => $this->getInfoWeek($startDate),
-            'dateRange' => $this->getArrayDates($startDate, 6),
-            ]);
-    }
-
-    public function linen($startDate)
-    {
-        $rooms = $this->model('Room');
-        $beds = $this->model('Bed');
-
-        if(isset($_POST['date'])){
-            $startDate = $_POST['date'];
-        }
-
-        $typesRoom = $rooms->getRoomCountByType();
-        $typeBed = $beds->getBedTypes();
-
-        $infoWeek = $this->getInfoWeek($startDate);
-        $dateRange = $this->getArrayDates($startDate, 6);
-        $dateDepType = $this->IgetInfoWeekByType($startDate);
-        $AllInfoBedsRoom = $this->nbBedByType();
-        $usageSheetWeek = $this->usageSheetWeek($startDate);
-
-        $this->view('housekeeping/linen', [
-            'bedInfo' => $AllInfoBedsRoom,
-            'typeRoom' =>  $typesRoom,
-            'weekInfo' => $this->getInfoWeek($startDate),
-            'dateRange' => $this->getArrayDates($startDate, 6),
-            'typeDepWeek' => $this->IgetInfoWeekByType($startDate),
-            'usageSheet' => $usageSheetWeek,
-        ]);
     }
 }
 
